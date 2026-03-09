@@ -1,0 +1,48 @@
+name: Reusable Go CI
+
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        description: Directory containing the Go module.
+        required: false
+        type: string
+        default: .
+      go-version-file:
+        description: Path to the go.mod file used to resolve the toolchain version.
+        required: false
+        type: string
+        default: go.mod
+      test-command:
+        description: Command used to validate the module.
+        required: false
+        type: string
+        default: go test ./...
+
+permissions:
+  contents: read
+
+jobs:
+  go-ci:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: ${{ inputs.go-version-file }}
+          cache: false
+
+      - name: Show toolchain
+        run: go version
+
+      - name: Run Go validation
+        run: ${{ inputs.test-command }}

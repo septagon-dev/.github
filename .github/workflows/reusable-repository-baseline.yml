@@ -1,0 +1,43 @@
+name: Reusable Repository Baseline
+
+on:
+  workflow_call:
+    inputs:
+      required_paths:
+        description: Newline-delimited list of files that must exist.
+        required: false
+        type: string
+        default: |
+          README.md
+          LICENSE
+          REPO_CHARTER.md
+          ROADMAP.md
+          docs/MIGRATION_BOUNDARY.md
+          .github/CODEOWNERS
+          .github/dependabot.yml
+
+permissions:
+  contents: read
+
+jobs:
+  repository-baseline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Verify required files
+        shell: bash
+        run: |
+          set -euo pipefail
+          missing=0
+          while IFS= read -r path; do
+            [[ -z "$path" ]] && continue
+            if [[ ! -e "$path" ]]; then
+              echo "::error title=Missing required file::$path"
+              missing=1
+            fi
+          done <<< "${{ inputs.required_paths }}"
+          exit "$missing"
