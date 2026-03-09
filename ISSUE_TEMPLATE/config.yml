@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security issue
+    url: mailto:hello@septagon.dev
+    about: Report security issues privately by email.
+  - name: Product and launch discussion
+    url: https://github.com/septagon-dev/platformkit-community/discussions
+    about: Use discussions for roadmap, launch, and general product questions.
