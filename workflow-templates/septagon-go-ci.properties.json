@@ -1,0 +1,9 @@
+{
+  "name": "Septagon Go CI",
+  "description": "Baseline repository checks plus Go test execution for Go-based repositories.",
+  "iconName": "octicon codescan-checkmark",
+  "categories": [
+    "Go",
+    "Automation"
+  ]
+}

@@ -1,0 +1,14 @@
+name: Repository Baseline
+
+on:
+  pull_request:
+  push:
+    branches:
+      - $default-branch
+
+permissions:
+  contents: read
+
+jobs:
+  baseline:
+    uses: septagon-dev/.github/.github/workflows/reusable-repository-baseline.yml@main

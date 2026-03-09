@@ -1,0 +1,17 @@
+name: Go CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - $default-branch
+
+permissions:
+  contents: read
+
+jobs:
+  baseline:
+    uses: septagon-dev/.github/.github/workflows/reusable-repository-baseline.yml@main
+
+  go-ci:
+    uses: septagon-dev/.github/.github/workflows/reusable-go-ci.yml@main
