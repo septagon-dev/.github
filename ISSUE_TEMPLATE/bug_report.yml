@@ -1,21 +1,33 @@
 name: Bug report
-description: Report a defect with enough detail to reproduce and fix it.
+description: Report a defect with enough detail to reproduce, triage, and fix it.
 title: "bug: "
 labels:
   - bug
+  - needs-triage
 body:
   - type: textarea
     id: summary
     attributes:
       label: Summary
-      description: Describe the problem and the impact.
+      description: Describe the defect, impact, and who is affected.
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - sev-1 critical
+        - sev-2 high
+        - sev-3 medium
+        - sev-4 low
     validations:
       required: true
   - type: textarea
-    id: steps
+    id: reproduction
     attributes:
       label: Reproduction
-      description: List the exact steps to reproduce the issue.
+      description: List the exact steps, commands, inputs, or requests needed to reproduce it.
       placeholder: |
         1. Go to ...
         2. Run ...
@@ -34,6 +46,11 @@ body:
       label: Actual behavior
     validations:
       required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Logs, screenshots, stack traces, or API responses.
   - type: input
     id: version
     attributes:

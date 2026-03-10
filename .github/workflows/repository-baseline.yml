@@ -17,5 +17,8 @@ jobs:
         profile/README.md
         .github/CODEOWNERS
         .github/dependabot.yml
+        PULL_REQUEST_TEMPLATE.md
+        SECURITY.md
+        CONTRIBUTING.md
+        SUPPORT.md
         docs/REPOSITORY_STANDARDS.md
-        docs/SEPTAGON_GITHUB_PROFILE_GUIDE.md
