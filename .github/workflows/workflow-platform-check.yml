@@ -1,0 +1,62 @@
+name: Workflow Platform Check
+
+on:
+  pull_request:
+    paths:
+      - ".github/actions/**"
+      - ".github/workflows/**"
+      - "workflow-templates/**"
+      - "docs/REPOSITORY_STANDARDS.md"
+      - "docs/WORKFLOW_PLATFORM.md"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/actions/**"
+      - ".github/workflows/**"
+      - "workflow-templates/**"
+      - "docs/REPOSITORY_STANDARDS.md"
+      - "docs/WORKFLOW_PLATFORM.md"
+
+permissions:
+  contents: read
+
+jobs:
+  workflow-platform-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: stable
+          cache: false
+
+      - name: Install actionlint
+        shell: bash
+        run: |
+          set -euo pipefail
+          GOBIN="$HOME/.local/bin" go install github.com/rhysd/actionlint/cmd/actionlint@v1.7.8
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Lint repository workflows
+        shell: bash
+        run: actionlint
+
+      - name: Lint workflow templates
+        shell: bash
+        run: |
+          set -euo pipefail
+          actionlint workflow-templates/*.yml
+
+      - name: Validate workflow template metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in workflow-templates/*.properties.json; do
+            jq empty "$file"
+          done
