@@ -18,6 +18,7 @@ Septagon uses all three.
 - default `CONTRIBUTING`, `SECURITY`, `SUPPORT`, issue forms, and pull request template
 - reusable workflows called by product repositories
 - workflow templates shown in GitHub's workflow UI
+- workflow platform standards for repository classes
 
 ## What Does Not Live Here
 
@@ -26,3 +27,18 @@ Septagon uses all three.
 - private operational automation
 
 That second class belongs in `repo-template`.
+
+## Workflow Standards
+
+Repository workflow behavior should be standardized here, not recreated ad hoc in product repositories.
+
+Reference:
+
+- [Workflow Platform](WORKFLOW_PLATFORM.md)
+
+Core rules:
+
+1. Baseline checks are mandatory for every repository.
+2. Go repositories should call the reusable Go workflow.
+3. Private module authentication should be centralized in the workflow platform.
+4. Repository-local workflows are allowed only for repo-specific validation or release behavior that cannot reasonably live in the shared workflow layer.
