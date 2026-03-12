@@ -9,15 +9,49 @@ on:
         type: string
         default: .
       go-version-file:
-        description: Path to the go.mod file used to resolve the toolchain version.
+        description: Path to the go.mod file, relative to working-directory.
         required: false
         type: string
         default: go.mod
+      cache-dependency-path:
+        description: Path to the dependency file used for Go cache invalidation, relative to working-directory.
+        required: false
+        type: string
+        default: go.sum
+      requires-private-modules:
+        description: Whether the workflow needs access to private Septagon modules.
+        required: false
+        type: boolean
+        default: false
+      go-private-pattern:
+        description: GOPRIVATE-compatible pattern for private modules.
+        required: false
+        type: string
+        default: github.com/septagon-dev/*
+      setup-command:
+        description: Optional command executed after Go setup and before dependency download.
+        required: false
+        type: string
+        default: ""
+      download-command:
+        description: Optional dependency bootstrap command executed before validation.
+        required: false
+        type: string
+        default: go mod download
       test-command:
         description: Command used to validate the module.
         required: false
         type: string
         default: go test ./...
+      timeout-minutes:
+        description: Job timeout in minutes.
+        required: false
+        type: number
+        default: 15
+    secrets:
+      modules-token:
+        description: Token with read access to private Septagon modules.
+        required: false
 
 permissions:
   contents: read
@@ -25,6 +59,7 @@ permissions:
 jobs:
   go-ci:
     runs-on: ubuntu-latest
+    timeout-minutes: ${{ inputs.timeout-minutes }}
     defaults:
       run:
         shell: bash
@@ -38,11 +73,38 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
-          go-version-file: ${{ inputs.go-version-file }}
-          cache: false
+          go-version-file: ${{ format('{0}/{1}', inputs.working-directory, inputs.go-version-file) }}
+          cache: true
+          cache-dependency-path: ${{ format('{0}/{1}', inputs.working-directory, inputs.cache-dependency-path) }}
+
+      - name: Validate private module secret configuration
+        if: ${{ inputs.requires-private-modules }}
+        env:
+          MODULES_TOKEN: ${{ secrets.modules-token }}
+        run: |
+          if [[ -n "${MODULES_TOKEN}" ]]; then
+            exit 0
+          fi
+          echo "::error title=Missing modules token::Pass secrets.modules-token when requires-private-modules is true."
+          exit 1
+
+      - name: Configure private Go modules
+        if: ${{ inputs.requires-private-modules }}
+        uses: septagon-dev/.github/.github/actions/setup-private-go@main
+        with:
+          github-token: ${{ secrets.modules-token }}
+          go-private-pattern: ${{ inputs.go-private-pattern }}
 
       - name: Show toolchain
         run: go version
+
+      - name: Run setup command
+        if: ${{ inputs.setup-command != '' }}
+        run: ${{ inputs.setup-command }}
+
+      - name: Download dependencies
+        if: ${{ inputs.download-command != '' }}
+        run: ${{ inputs.download-command }}
 
       - name: Run Go validation
         run: ${{ inputs.test-command }}
