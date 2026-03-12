@@ -1,0 +1,9 @@
+{
+  "name": "Septagon Code Quality",
+  "description": "Shared workflow linting and CodeQL scanning for Septagon repositories.",
+  "iconName": "octicon codescan-checkmark",
+  "categories": [
+    "Code Quality",
+    "Automation"
+  ]
+}
