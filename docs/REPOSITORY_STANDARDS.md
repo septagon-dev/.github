@@ -16,7 +16,7 @@ Septagon uses all three.
 
 - organization profile README
 - default `CONTRIBUTING`, `SECURITY`, `SUPPORT`, issue forms, and pull request template
-- reusable workflows called by product repositories, including baseline, code-quality, and Go validation lanes
+- reusable workflows called by product repositories
 - workflow templates shown in GitHub's workflow UI
 
 ## What Does Not Live Here
