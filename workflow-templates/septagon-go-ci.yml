@@ -15,3 +15,7 @@ jobs:
 
   go-ci:
     uses: septagon-dev/.github/.github/workflows/reusable-go-ci.yml@main
+    with:
+      requires-private-modules: true
+    secrets:
+      modules-token: ${{ secrets.SEPTAGON_MODULES_TOKEN }}

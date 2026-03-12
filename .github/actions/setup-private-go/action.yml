@@ -1,0 +1,33 @@
+name: Setup Private Go Modules
+description: Configure Go and Git to fetch private Septagon modules during CI.
+
+inputs:
+  github-token:
+    description: Token with read access to private modules.
+    required: true
+  github-host:
+    description: Git host used for module downloads.
+    required: false
+    default: github.com
+  go-private-pattern:
+    description: GOPRIVATE-compatible pattern for private modules.
+    required: false
+    default: github.com/septagon-dev/*
+
+runs:
+  using: composite
+  steps:
+    - name: Configure private Go module access
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        {
+          echo "GIT_TERMINAL_PROMPT=0"
+          echo "GOWORK=off"
+          echo "GOPRIVATE=${{ inputs.go-private-pattern }}"
+          echo "GONOSUMDB=${{ inputs.go-private-pattern }}"
+          echo "GONOPROXY=${{ inputs.go-private-pattern }}"
+        } >> "$GITHUB_ENV"
+
+        git config --global url."https://x-access-token:${{ inputs.github-token }}@${{ inputs.github-host }}/".insteadOf "https://${{ inputs.github-host }}/"
