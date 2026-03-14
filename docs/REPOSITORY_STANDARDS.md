@@ -7,7 +7,7 @@ This repository owns the GitHub organization defaults for `septagon-dev`.
 GitHub supports three separate mechanisms that should not be conflated:
 
 1. A public `.github` repository for organization profile content and default community health files.
-2. Reusable workflows for centrally maintained CI logic.
+2. A dedicated `actions` repository for centrally maintained reusable workflows and composite actions.
 3. Workflow templates for the GitHub UI when creating or adding workflows.
 
 Septagon uses all three.
@@ -16,9 +16,19 @@ Septagon uses all three.
 
 - organization profile README
 - default `CONTRIBUTING`, `SECURITY`, `SUPPORT`, issue forms, and pull request template
-- reusable workflows called by product repositories
 - workflow templates shown in GitHub's workflow UI
 - workflow platform standards for repository classes
+
+## Shared Workflow Baselines
+
+The reusable workflows and composite actions in `septagon-dev/actions` are the organization-owned policy layer for:
+
+- repository baseline checks
+- Go validation
+- dependency review on pull requests
+- reusable CodeQL analysis
+
+Workflow templates in `workflow-templates/` should call `septagon-dev/actions` rather than duplicating security logic in every repository.
 
 ## What Does Not Live Here
 
