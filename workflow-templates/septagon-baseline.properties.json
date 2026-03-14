@@ -1,6 +1,6 @@
 {
   "name": "Septagon Repository Baseline",
-  "description": "Minimal repository hygiene workflow for Septagon repositories.",
+  "description": "Repository hygiene plus baseline dependency review for Septagon repositories.",
   "iconName": "octicon shield-check",
   "categories": [
     "Automation"

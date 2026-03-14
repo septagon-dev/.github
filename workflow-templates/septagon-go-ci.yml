@@ -8,13 +8,24 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write
+  security-events: write
 
 jobs:
   baseline:
-    uses: septagon-dev/.github/.github/workflows/reusable-repository-baseline.yml@main
+    uses: septagon-dev/actions/.github/workflows/reusable-repository-baseline.yml@main
+
+  dependency-review:
+    uses: septagon-dev/actions/.github/workflows/reusable-dependency-review.yml@main
+
+  codeql:
+    uses: septagon-dev/actions/.github/workflows/reusable-codeql.yml@main
+    with:
+      language: go
+      go-version-file: go.mod
 
   go-ci:
-    uses: septagon-dev/.github/.github/workflows/reusable-go-ci.yml@main
+    uses: septagon-dev/actions/.github/workflows/reusable-go-ci.yml@main
     with:
       requires-private-modules: true
     secrets:

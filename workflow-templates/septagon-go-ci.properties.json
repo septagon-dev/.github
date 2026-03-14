@@ -1,6 +1,7 @@
 {
   "name": "Septagon Go CI",
   "description": "Baseline repository checks plus reusable Go CI with private-module support for Septagon repositories.",
+  "description": "Baseline repository checks plus reusable Go CI with private-module support for Septagon repositories.",
   "iconName": "octicon codescan-checkmark",
   "categories": [
     "Go",
