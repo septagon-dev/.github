@@ -75,13 +75,13 @@ jobs:
           git config --global url."https://x-access-token:${SEPTAGON_MODULES_TOKEN}@github.com/".insteadOf "https://github.com/"
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@603b797f8b14b413fe025cd935a91c16c4782713 # v3
+        uses: github/codeql-action/init@b1bff81932f5cdfc8695c7752dcee935dcd061c8 # v4.33.0
         with:
           languages: ${{ inputs.language }}
 
       - name: Autobuild
         if: ${{ inputs.build-mode == 'autobuild' }}
-        uses: github/codeql-action/autobuild@603b797f8b14b413fe025cd935a91c16c4782713 # v3
+        uses: github/codeql-action/autobuild@b1bff81932f5cdfc8695c7752dcee935dcd061c8 # v4.33.0
 
       - name: Manual build
         if: ${{ inputs.build-mode == 'manual' }}
@@ -94,6 +94,6 @@ jobs:
           ${{ inputs.build-command }}
 
       - name: Analyze
-        uses: github/codeql-action/analyze@603b797f8b14b413fe025cd935a91c16c4782713 # v3
+        uses: github/codeql-action/analyze@b1bff81932f5cdfc8695c7752dcee935dcd061c8 # v4.33.0
         with:
           category: "/language:${{ inputs.language }}"
