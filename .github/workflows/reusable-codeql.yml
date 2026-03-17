@@ -51,13 +51,13 @@ jobs:
         working-directory: ${{ inputs.working-directory }}
     steps:
       - name: Check out repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           persist-credentials: false
 
       - name: Set up Go
         if: ${{ inputs.language == 'go' }}
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 # v6
         with:
           go-version-file: ${{ inputs.go-version-file }}
           cache: false
@@ -75,13 +75,13 @@ jobs:
           git config --global url."https://x-access-token:${SEPTAGON_MODULES_TOKEN}@github.com/".insteadOf "https://github.com/"
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@603b797f8b14b413fe025cd935a91c16c4782713 # v3
         with:
           languages: ${{ inputs.language }}
 
       - name: Autobuild
         if: ${{ inputs.build-mode == 'autobuild' }}
-        uses: github/codeql-action/autobuild@v3
+        uses: github/codeql-action/autobuild@603b797f8b14b413fe025cd935a91c16c4782713 # v3
 
       - name: Manual build
         if: ${{ inputs.build-mode == 'manual' }}
@@ -94,6 +94,6 @@ jobs:
           ${{ inputs.build-command }}
 
       - name: Analyze
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@603b797f8b14b413fe025cd935a91c16c4782713 # v3
         with:
           category: "/language:${{ inputs.language }}"
