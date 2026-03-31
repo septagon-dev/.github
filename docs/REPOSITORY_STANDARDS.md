@@ -50,5 +50,6 @@ Core rules:
 
 1. Baseline checks are mandatory for every repository.
 2. Go repositories should call the reusable Go workflow.
-3. Private module authentication should be centralized in the workflow platform.
-4. Repository-local workflows are allowed only for repo-specific validation or release behavior that cannot reasonably live in the shared workflow layer.
+3. Repositories with code should expose one local pre-commit contract (`make precommit`, `npm run precommit`, or equivalent) and shared CI should call that contract.
+4. Private module authentication should be centralized in the workflow platform.
+5. Repository-local workflows are allowed only for repo-specific validation or release behavior that cannot reasonably live in the shared workflow layer.

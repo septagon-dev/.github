@@ -1,6 +1,6 @@
 # Septagon Workflow Platform
 
-Septagon repositories should consume reusable workflow building blocks from the public `.github` repository instead of re-implementing repository-local CI.
+Septagon repositories should consume reusable workflow building blocks from the `actions` repository instead of re-implementing repository-local CI.
 
 ## Design Rules
 
@@ -8,6 +8,7 @@ Septagon repositories should consume reusable workflow building blocks from the 
 2. Keep private module authentication in one place.
 3. Standardize core Actions versions across repositories.
 4. Treat baseline checks, Go validation, and release automation as separate workflow classes.
+5. Keep one local pre-commit contract per repository and have CI call that same contract.
 
 ## Workflow Classes
 
@@ -26,7 +27,7 @@ Use the reusable Go CI workflow for Go libraries and runtime packages.
 Expected workflow shape:
 
 - baseline workflow
-- repo-local workflow that calls `septagon-dev/.github/.github/workflows/reusable-go-ci.yml`
+- repo-local workflow that calls `septagon-dev/actions/.github/workflows/reusable-go-ci.yml`
 
 Required conventions:
 
@@ -34,6 +35,37 @@ Required conventions:
 - `actions/setup-go@v6`
 - `GOWORK=off` for split-repo validation
 - central private-module auth through `SEPTAGON_MODULES_TOKEN`
+- repo-local `make precommit` as the primary validation entrypoint when a Makefile exists
+
+### Node repositories
+
+Use the reusable Node CI workflow for npm-based repositories.
+
+Expected workflow shape:
+
+- baseline workflow
+- repo-local workflow that calls `septagon-dev/actions/.github/workflows/reusable-node-ci.yml`
+
+Required conventions:
+
+- `actions/checkout@v6`
+- `actions/setup-node`
+- `npm run precommit` as the primary validation entrypoint
+
+### Helm / chart repositories
+
+Use the reusable Helm CI workflow for repositories whose main product is Helm chart validation.
+
+Expected workflow shape:
+
+- baseline workflow
+- repo-local workflow that calls `septagon-dev/actions/.github/workflows/reusable-helm-ci.yml`
+
+Required conventions:
+
+- `actions/checkout@v6`
+- `azure/setup-helm`
+- `make precommit` or equivalent chart validation contract
 
 ### Application repositories
 
@@ -57,7 +89,9 @@ Use the reusable Go workflow or the `setup-private-go` composite action instead.
 
 ## Current Standards
 
-- Baseline checks live in `.github/workflows/reusable-repository-baseline.yml`
-- Go CI lives in `.github/workflows/reusable-go-ci.yml`
-- Private module bootstrap lives in `.github/actions/setup-private-go/action.yml`
+- Baseline checks live in `actions/.github/workflows/reusable-repository-baseline.yml`
+- Go CI lives in `actions/.github/workflows/reusable-go-ci.yml`
+- Node CI lives in `actions/.github/workflows/reusable-node-ci.yml`
+- Helm CI lives in `actions/.github/workflows/reusable-helm-ci.yml`
+- Private module bootstrap lives in `actions/.github/actions/setup-private-go/action.yml`
 - Workflow templates in `workflow-templates/` should point to reusable workflows instead of embedding custom CI logic

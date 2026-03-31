@@ -105,5 +105,23 @@ jobs:
         if: ${{ inputs.download-command != '' }}
         run: ${{ inputs.download-command }}
 
+      - name: Detect runtime hardcode allowlist
+        id: runtime-hardcode-guard-config
+        run: |
+          allowlist="${{ inputs.working-directory }}/.github/runtime-hardcode-allowlist.txt"
+          if [[ -f "$allowlist" ]]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+            echo "allowlist=$allowlist" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run runtime hardcode guard
+        if: ${{ steps.runtime-hardcode-guard-config.outputs.enabled == 'true' }}
+        uses: septagon-dev/actions/.github/actions/runtime-hardcode-guard@main
+        with:
+          working-directory: ${{ inputs.working-directory }}
+          allowlist-path: ${{ steps.runtime-hardcode-guard-config.outputs.allowlist }}
+
       - name: Run Go validation
         run: ${{ inputs.test-command }}
