@@ -81,7 +81,7 @@ jobs:
 
       - name: Autobuild
         if: ${{ inputs.build-mode == 'autobuild' }}
-        uses: github/codeql-action/autobuild@87557b9c84dde89fdd9b10e88954ac2f4248e463 # v4.36.1
+        uses: github/codeql-action/autobuild@7188fc363630916deb702c7fdcf4e481b751f97a # v4.37.1
 
       - name: Manual build
         if: ${{ inputs.build-mode == 'manual' }}
