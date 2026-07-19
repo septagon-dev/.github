@@ -8,11 +8,13 @@ on:
 
 permissions:
   contents: read
-  pull-requests: write
 
 jobs:
   baseline:
     uses: septagon-dev/actions/.github/workflows/reusable-repository-baseline.yml@main
 
   dependency-review:
+    permissions:
+      contents: read
+      pull-requests: write
     uses: septagon-dev/actions/.github/workflows/reusable-dependency-review.yml@main

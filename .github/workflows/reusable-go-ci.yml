@@ -93,6 +93,7 @@ jobs:
         uses: septagon-dev/actions/.github/actions/setup-private-go@main
         with:
           github-token: ${{ secrets.modules-token }}
+          go-private-pattern: ${{ inputs.go-private-pattern }}
 
       - name: Show toolchain
         run: go version

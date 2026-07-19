@@ -1,0 +1,54 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Septagon organization dependency-update policy.",
+  "extends": [
+    "config:best-practices",
+    "helpers:pinGitHubActionDigests",
+    ":dependencyDashboard",
+    ":enableVulnerabilityAlertsWithAdditionalLabel(security)"
+  ],
+  "labels": [
+    "dependencies"
+  ],
+  "minimumReleaseAge": "7 days",
+  "prConcurrentLimit": 8,
+  "prHourlyLimit": 2,
+  "rebaseWhen": "conflicted",
+  "schedule": [
+    "before 5am on monday"
+  ],
+  "semanticCommits": "enabled",
+  "packageRules": [
+    {
+      "description": "Require an explicit dashboard decision for major upgrades.",
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "dependencyDashboardApproval": true
+    },
+    {
+      "description": "Group safe non-major GitHub Actions updates and retain digest pins.",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchUpdateTypes": [
+        "digest",
+        "minor",
+        "patch"
+      ],
+      "groupName": "github-actions non-major updates"
+    },
+    {
+      "description": "Do not automerge release, container, infrastructure, or action changes.",
+      "matchManagers": [
+        "dockerfile",
+        "docker-compose",
+        "github-actions",
+        "helm-values",
+        "helmv3",
+        "terraform"
+      ],
+      "automerge": false
+    }
+  ]
+}
