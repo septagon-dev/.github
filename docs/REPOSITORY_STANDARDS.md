@@ -1,55 +1,33 @@
-# Septagon Repository Standards
+# Repository standards
 
-This repository owns the GitHub organization defaults for `septagon-dev`.
+This repository owns the `septagon-dev` organization profile, default community
+documents, issue forms, workflow templates and Renovate preset. Product code
+and its documentation belong in the repository that implements the behavior.
+A README should tell a new reader what the repository owns, how to use it and
+how to verify a change without requiring an old workspace layout.
 
-## Why This Exists
+Use each repository's current README, agent instructions and build files as
+the authority for local commands. PlatformKit documents `make check`; its
+mobile client documents `npm run check`. A documentation repository may have
+only link, format and workflow checks. Do not require every repository to
+invent a `make precommit`, `REPO_CHARTER.md` or migration document merely to
+match a generic template.
 
-GitHub supports three separate mechanisms that should not be conflated:
+Shared workflows live in `septagon-dev/actions`. This repository's baseline
+and workflow templates reference that repository explicitly. Copies of reusable
+workflows and a private-Go setup action also exist under `.github/` here;
+their presence does not prove that a product uses them. Find a caller's
+`uses:` reference and inputs before changing shared behavior. See
+[WORKFLOW_PLATFORM.md](WORKFLOW_PLATFORM.md) for the current files and checks.
 
-1. A public `.github` repository for organization profile content and default community health files.
-2. A dedicated `actions` repository for centrally maintained reusable workflows and composite actions.
-3. Workflow templates for the GitHub UI when creating or adding workflows.
+A workflow template is a starting point for a caller. Configure required files,
+validation commands, permissions and private-module access to match that
+repository. In particular, the baseline template's default file list and the
+Go template's `make precommit` command need review before adoption. Passing a
+file-existence baseline establishes that the files exist; it does not establish
+that documentation is accurate or that the product works.
 
-Septagon uses all three.
-
-## What Lives Here
-
-- organization profile README
-- default `CONTRIBUTING`, `SECURITY`, `SUPPORT`, issue forms, and pull request template
-- workflow templates shown in GitHub's workflow UI
-- workflow platform standards for repository classes
-
-## Shared Workflow Baselines
-
-The reusable workflows and composite actions in `septagon-dev/actions` are the organization-owned policy layer for:
-
-- repository baseline checks
-- Go validation
-- dependency review on pull requests
-- reusable CodeQL analysis
-
-Workflow templates in `workflow-templates/` should call `septagon-dev/actions` rather than duplicating security logic in every repository.
-
-## What Does Not Live Here
-
-- repository-specific starter files that should become part of each repository's history
-- product source code
-- private operational automation
-
-That second class belongs in `repo-template`.
-
-## Workflow Standards
-
-Repository workflow behavior should be standardized here, not recreated ad hoc in product repositories.
-
-Reference:
-
-- [Workflow Platform](WORKFLOW_PLATFORM.md)
-
-Core rules:
-
-1. Baseline checks are mandatory for every repository.
-2. Go repositories should call the reusable Go workflow.
-3. Repositories with code should expose one local pre-commit contract (`make precommit`, `npm run precommit`, or equivalent) and shared CI should call that contract.
-4. Private module authentication should be centralized in the workflow platform.
-5. Repository-local workflows are allowed only for repo-specific validation or release behavior that cannot reasonably live in the shared workflow layer.
+Keep public navigation focused on the public products and their source-owned
+guides. Private catalog capabilities, client identities, credentials and
+cluster details belong in their owning private repositories. Do not publish
+an internal repository inventory as an organization profile.

@@ -1,7 +1,11 @@
 # Support
 
-- Product and launch discussion: `platformkit-community`
-- Repository-specific questions: open an issue in the relevant repository
-- Security issues: `hello@septagon.dev`
+For product setup and repository questions, start with the README and support
+guidance in [PlatformKit](https://github.com/septagon-oss/platformkit) or
+[PlatformKit Mobile](https://github.com/septagon-oss/platformkit-mobile).
+Report a bug in the repository that owns it, with the affected version,
+reproduction steps and logs that contain no private data.
 
-Keep support requests aligned with the repository boundary documented by each repository.
+For company and commercial questions, contact `hello@septagon.dev`.
+Report vulnerabilities privately to the same address; see
+[SECURITY.md](SECURITY.md).

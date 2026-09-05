@@ -1,32 +1,36 @@
-# Renovate rollout
+# Renovate configuration and activation
 
-The organization policy lives in `renovate-config.json` at the repository root.
-Renovate automatically proposes this preset when a `septagon-dev` repository is
-onboarded. The preset pins GitHub Actions to immutable digests, waits seven days
-before routine upgrades, keeps security remediation immediate, and requires a
-human decision for major upgrades.
+[renovate-config.json](../renovate-config.json) is the organization preset.
+[renovate.json](../renovate.json) opts this repository into
+`local>septagon-dev/.github:renovate-config`. Those files configure Renovate;
+they do not establish that the GitHub App is installed or running.
 
-## Activation
+The preset declares a seven-day minimum release age, a Monday update schedule,
+GitHub Actions digest pinning, a dependency dashboard and vulnerability alerts.
+Major updates require dashboard approval. It groups non-major Actions updates
+and disables automerge for the listed container, action and infrastructure
+managers. Read the JSON for exact limits and package rules.
 
-Activation changes GitHub organization state and is intentionally separate from
-this repository change:
+## Activate and verify
 
-1. Install the Mend Renovate GitHub App for the `septagon-dev` organization. Start
-   with the managed first-class repositories in `infrastructure/infra/catalog/`;
-   include `.github`, `actions`, and `platformkit-infra` in the pilot.
-2. Confirm the onboarding pull request in each pilot repository extends
-   `local>septagon-dev/.github:renovate-config`.
-3. Require the repository's real CI checks before merging any dependency update.
-   Do not enable automerge during the pilot.
-4. Verify that the Dependency Dashboard exists, GitHub Actions references remain
-   full-length SHA pins with version comments, and vulnerability-alert pull
-   requests are not held by the normal weekly schedule.
-5. Expand installation to every managed first-class repository after one clean
-   weekly cycle. Keep Dependabot security updates enabled; disable overlapping
-   Dependabot *version* updates only after Renovate is demonstrably active.
+An organization maintainer chooses the app's repository access and a current
+pilot set. Use active repositories with functioning checks, including this
+repository if its shared preset is part of the pilot. Do not derive the pilot
+from an archived workspace inventory.
 
-## Rollback
+Confirm that each repository's onboarding configuration extends the preset
+and that its actual CI requirements protect dependency updates. Keep automerge
+disabled during the pilot. Inspect the dashboard and proposed updates to
+confirm digest pins, the age and schedule rules, major-update approval and
+vulnerability-alert handling in the installed Renovate version.
 
-Suspend the app or restrict its repository access. Existing dependency pull
-requests can be closed without changing application code. Keep the shared preset
-and Dependabot security alerts in place while investigating.
+This repository still has Dependabot version updates configured in
+`.github/dependabot.yml`. Disable overlapping version updates only after
+Renovate is observed working; keep security alerts available. Expanding app
+access, merging onboarding changes and changing organization settings are
+operational actions, not effects of editing this guide.
+
+To stop the rollout, suspend the app or narrow its repository access and review
+open dependency pull requests. Keep the preset and security-alert configuration
+available while investigating. Locally, `jq empty renovate.json
+renovate-config.json` checks JSON syntax only.

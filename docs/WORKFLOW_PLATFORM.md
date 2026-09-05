@@ -1,97 +1,69 @@
-# Septagon Workflow Platform
+# Workflow maintenance
 
-Septagon repositories should consume reusable workflow building blocks from the `actions` repository instead of re-implementing repository-local CI.
+This repository provides organization defaults and workflow templates. Its
+active baseline and both templates call workflows in `septagon-dev/actions`.
+The exact `uses:` reference in a caller determines which implementation runs;
+a similarly named file in this repository is a separate file.
 
-## Design Rules
+## Files and ownership
 
-1. Reuse central workflows before adding repo-local YAML.
-2. Keep private module authentication in one place.
-3. Standardize core Actions versions across repositories.
-4. Treat baseline checks, Go validation, and release automation as separate workflow classes.
-5. Keep one local pre-commit contract per repository and have CI call that same contract.
+`.github/workflows/repository-baseline.yml` calls the shared repository
+baseline with an explicit list of this repository's required community and
+profile files. That list is the check's contract. It does not require a Go
+module or an application build.
 
-## Workflow Classes
+`.github/workflows/workflow-platform-check.yml` runs when workflow/action
+files, templates or the repository/workflow standards change. It installs
+actionlint v1.7.8, lints repository workflows and templates, and validates each
+template's JSON metadata. This is the locally reproducible workflow check.
 
-### Baseline-only repositories
+`workflow-templates/septagon-baseline.yml` calls the shared baseline and
+dependency review. `workflow-templates/septagon-go-ci.yml` adds CodeQL and Go
+validation, currently requesting private modules, `make precommit` and a
+`SEPTAGON_MODULES_TOKEN` secret. Review those choices for each caller:
+public modules do not need a private token, and the validation command must
+exist in the consuming repository.
 
-Use only the reusable repository baseline when the repository is documentation-first or intentionally empty during bootstrap.
+Reusable baseline, Go, CodeQL and dependency-review workflows, plus
+`.github/actions/setup-private-go/action.yml`, are also present here.
+The shared `actions` repository additionally has Node and Helm workflows.
+Do not edit a local copy expecting a caller of `septagon-dev/actions` to
+change. Inspect the referenced implementation and its inputs first.
 
-Expected workflow:
+## Configure a caller
 
-- `.github/workflows/repository-baseline.yml`
+Keep toolchain setup, private-module authentication and common validation in
+the shared workflow where the caller already uses it. Supply the consuming
+repository's real check command through the workflow's inputs. A reusable
+workflow's default command is not a promise that the target repository defines
+that command.
 
-### Go module repositories
+The private-Go setup action writes Go privacy settings, `GOWORK=off` and a
+Git URL rewrite for module access. Enable it only for callers that need
+private dependencies and pass the token through the declared secret input.
+Do not copy credential values into workflow files, documentation or logs.
 
-Use the reusable Go CI workflow for Go libraries and runtime packages.
+Keep product-specific journeys and release behavior with the product.
+Documentation changes should describe the workflows that exist; changing
+workflow ownership or organization settings is separate operational work.
 
-Expected workflow shape:
+## Validate this repository
 
-- baseline workflow
-- repo-local workflow that calls `septagon-dev/actions/.github/workflows/reusable-go-ci.yml`
+Run from the repository root with actionlint and jq installed:
 
-Required conventions:
+```sh
+git diff --check
+actionlint
+actionlint workflow-templates/*.yml
+for file in workflow-templates/*.properties.json; do
+  jq empty "$file"
+done
+```
 
-- `actions/checkout@v6`
-- `actions/setup-go@v6`
-- `GOWORK=off` for split-repo validation
-- central private-module auth through `SEPTAGON_MODULES_TOKEN`
-- repo-local `make precommit` as the primary validation entrypoint when a Makefile exists
-
-### Node repositories
-
-Use the reusable Node CI workflow for npm-based repositories.
-
-Expected workflow shape:
-
-- baseline workflow
-- repo-local workflow that calls `septagon-dev/actions/.github/workflows/reusable-node-ci.yml`
-
-Required conventions:
-
-- `actions/checkout@v6`
-- `actions/setup-node`
-- `npm run precommit` as the primary validation entrypoint
-
-### Helm / chart repositories
-
-Use the reusable Helm CI workflow for repositories whose main product is Helm chart validation.
-
-Expected workflow shape:
-
-- baseline workflow
-- repo-local workflow that calls `septagon-dev/actions/.github/workflows/reusable-helm-ci.yml`
-
-Required conventions:
-
-- `actions/checkout@v6`
-- `azure/setup-helm`
-- `make precommit` or equivalent chart validation contract
-
-### Application repositories
-
-App repositories may keep repo-local smoke or release workflows, but they should still consume reusable pieces for:
-
-- Go toolchain setup
-- private module authentication
-- baseline validation
-
-## Private Module Policy
-
-Private module access must flow through the reusable platform.
-
-Do not duplicate this logic in repository-local workflows:
-
-- `git config` token rewriting
-- `GOPRIVATE` / `GONOSUMDB` / `GONOPROXY`
-- `GOWORK=off`
-
-Use the reusable Go workflow or the `setup-private-go` composite action instead.
-
-## Current Standards
-
-- Baseline checks live in `actions/.github/workflows/reusable-repository-baseline.yml`
-- Go CI lives in `actions/.github/workflows/reusable-go-ci.yml`
-- Node CI lives in `actions/.github/workflows/reusable-node-ci.yml`
-- Helm CI lives in `actions/.github/workflows/reusable-helm-ci.yml`
-- Private module bootstrap lives in `actions/.github/actions/setup-private-go/action.yml`
-- Workflow templates in `workflow-templates/` should point to reusable workflows instead of embedding custom CI logic
+Also confirm that every path listed in
+`.github/workflows/repository-baseline.yml` exists. When editing Renovate
+configuration, run `jq empty renovate.json renovate-config.json`; this checks
+JSON syntax, not Renovate's schema or app activation. Review changed Markdown
+links and describe exactly which checks passed. No local check here proves
+that a workflow executed successfully on GitHub or that an organization app
+is installed.
