@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   baseline:
-    uses: septagon-dev/actions/.github/workflows/reusable-repository-baseline.yml@76726702fe8c06559734b68285ff8566b5903782
+    uses: septagon-dev/actions/.github/workflows/reusable-repository-baseline.yml@257d61a128613477477bc8b57cd08f8b97dfca07
 
     with:
       required_paths: |
