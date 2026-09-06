@@ -6,8 +6,10 @@ The root contribution, conduct, security, support and pull-request files,
 together with `ISSUE_TEMPLATE/`, provide community defaults for repositories
 that do not supply their own.
 
-The baseline workflow template calls the shared implementation in
-`septagon-dev/actions` at an immutable commit. This repository owns profile
+The baseline workflow template is for private repositories in this organization
+and calls the shared implementation in `septagon-dev/actions` at an immutable
+commit. This public profile uses its own existing workflow maintenance check;
+GitHub does not allow a public caller to use a private reusable workflow. This repository owns profile
 content and contribution defaults; product build and release workflows stay
 with their source. The duplicate reusable workflows and split Go template
 have been removed.

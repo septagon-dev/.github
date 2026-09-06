@@ -1,6 +1,6 @@
 {
   "name": "Septagon Repository Baseline",
-  "description": "Check repository-owned documentation and contribution defaults.",
+  "description": "Baseline files for private septagon-dev repositories, using the private shared workflow at a pinned revision.",
   "iconName": "octicon shield-check",
   "categories": [
     "Automation"

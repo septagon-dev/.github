@@ -14,7 +14,9 @@ invent a `make precommit`, `REPO_CHARTER.md` or migration document merely to
 match a generic template.
 
 Shared workflow implementation lives in `septagon-dev/actions`. The baseline
-caller and starter template reference an immutable commit there. Configure the
+starter template for private organization repositories references an immutable
+commit there. Public repositories run their source-owned checks and cannot call
+this private workflow. Configure the
 required files to match the adopting repository. Product CI should execute that
 repository's actual verification command and dependency contract. See
 [WORKFLOW_PLATFORM.md](WORKFLOW_PLATFORM.md) for current checks.
