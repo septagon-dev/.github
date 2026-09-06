@@ -1,6 +1,6 @@
 {
   "name": "Septagon Repository Baseline",
-  "description": "Repository hygiene plus baseline dependency review for Septagon repositories.",
+  "description": "Check repository-owned documentation and contribution defaults.",
   "iconName": "octicon shield-check",
   "categories": [
     "Automation"

@@ -13,19 +13,14 @@ only link, format and workflow checks. Do not require every repository to
 invent a `make precommit`, `REPO_CHARTER.md` or migration document merely to
 match a generic template.
 
-Shared workflows live in `septagon-dev/actions`. This repository's baseline
-and workflow templates reference that repository explicitly. Copies of reusable
-workflows and a private-Go setup action also exist under `.github/` here;
-their presence does not prove that a product uses them. Find a caller's
-`uses:` reference and inputs before changing shared behavior. See
-[WORKFLOW_PLATFORM.md](WORKFLOW_PLATFORM.md) for the current files and checks.
+Shared workflow implementation lives in `septagon-dev/actions`. The baseline
+caller and starter template reference an immutable commit there. Configure the
+required files to match the adopting repository. Product CI should execute that
+repository's actual verification command and dependency contract. See
+[WORKFLOW_PLATFORM.md](WORKFLOW_PLATFORM.md) for current checks.
 
-A workflow template is a starting point for a caller. Configure required files,
-validation commands, permissions and private-module access to match that
-repository. In particular, the baseline template's default file list and the
-Go template's `make precommit` command need review before adoption. Passing a
-file-existence baseline establishes that the files exist; it does not establish
-that documentation is accurate or that the product works.
+A file-existence baseline establishes that files exist; it does not establish
+that their contents are accurate or that the product works.
 
 Keep public navigation focused on the public products and their source-owned
 guides. Private catalog capabilities, client identities, credentials and

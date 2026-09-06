@@ -6,11 +6,11 @@ The root contribution, conduct, security, support and pull-request files,
 together with `ISSUE_TEMPLATE/`, provide community defaults for repositories
 that do not supply their own.
 
-This repository also holds workflow templates, a Renovate preset, and workflow
-maintenance documentation. Its own baseline and the templates call shared
-workflows in `septagon-dev/actions`. Reusable workflow and action files also
-remain under `.github/` here; read the actual caller's `uses:` reference
-before choosing which repository owns a workflow change.
+The baseline workflow template calls the shared implementation in
+`septagon-dev/actions` at an immutable commit. This repository owns profile
+content and contribution defaults; product build and release workflows stay
+with their source. The duplicate reusable workflows and split Go template
+have been removed.
 
 For the current public product, start with
 [PlatformKit](https://github.com/septagon-oss/platformkit) and

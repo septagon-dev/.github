@@ -11,10 +11,9 @@ details. Do not restore split-repository migration instructions or require
 obsolete workspace paths. Public documents must not disclose private catalog,
 client, credential or deployment information.
 
-For workflow changes, identify the caller and follow its exact uses reference
-before editing. This repository contains reusable files, but its own baseline
-and templates call septagon-dev/actions. Do not treat a local copy as the
-implementation of a workflow hosted elsewhere.
+For workflow changes, inspect the exact referenced shared contract in
+`septagon-dev/actions`. Do not copy reusable implementations here or restore
+split-repository bootstrap templates. Product CI belongs with product source.
 
 Before committing, run git diff --check, review changed local links and URLs,
 and run actionlint plus actionlint workflow-templates/*.yml. Validate template
